@@ -15,7 +15,8 @@ public class MarkkitCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("market")) {
-            sender.sendMessage("command executed");            
+            sender.sendMessage("command executed");
+            return true;
         }
         return false;
     }

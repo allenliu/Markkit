@@ -1,17 +1,23 @@
 package markkit;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
 
 public class Markkit extends JavaPlugin {
 
     public static final String VERSION = "0.1";
+    public static final String MARKET_SIGN = ChatColor.DARK_AQUA + "[Market]";
 
-    protected static Configuration CONFIG;
+    public static Map<Player, Integer> playerTrade = new HashMap<Player, Integer>();
+    protected static MarkkitConfig config;
 
     private final MarkkitCommandExecutor commandExecutor = new MarkkitCommandExecutor(this);
     private final MarkkitPlayerListener playerListener = new MarkkitPlayerListener(this);
@@ -27,12 +33,11 @@ public class Markkit extends JavaPlugin {
     @Override
     public void onEnable() {
         log.info("Markkit " + VERSION + " enabled.");
-
-        CONFIG = getConfiguration();        
+        config = new MarkkitConfig(new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml"));
         getCommand("market").setExecutor(commandExecutor);
         registerEvents();
     }
-
+    
     private void registerEvents() {
         PluginManager pluginManager = this.getServer().getPluginManager();
         pluginManager.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Event.Priority.Normal, this);

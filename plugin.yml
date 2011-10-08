@@ -2,3 +2,8 @@ name: Markkit
 main: markkit.Markkit
 version: 0.1
 author: allenliu
+commands:
+    market:
+        description: Get information about market rates
+        usage: /<command>
+        aliases: ['markkit']
