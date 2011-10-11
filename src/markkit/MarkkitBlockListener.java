@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import markkit.util.InventoryUtils;
+import markkit.util.MaterialUtils;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.SignChangeEvent;
@@ -31,12 +30,6 @@ public class MarkkitBlockListener extends BlockListener {
             Player player = event.getPlayer();
             if(createMarket(player)) {              
                 event.setLine(0, Markkit.MARKET_SIGN);
-                Location eventLocation = event.getBlock().getLocation();
-                eventLocation.setY(eventLocation.getY() - 1);
-                Block chestBlock = eventLocation.getBlock();
-                if (chestBlock.getType() != Material.CHEST) {
-                    chestBlock.setType(Material.CHEST);
-                }
                 player.sendMessage(ChatColor.DARK_AQUA + "Successfully established a market.");
             } else {
                 event.getBlock().setType(Material.AIR);
@@ -63,9 +56,12 @@ public class MarkkitBlockListener extends BlockListener {
            
             for (int i = 0; i < list.size() - 1; i++) {
                 Material material = list.get(i);
-                out.append(" ").append(Math.abs(missingMaterials.get(material))).append(" ").append(material).append(",");
+                out.append(" ").append(Math.abs(missingMaterials.get(material))).append(" ").append(MaterialUtils.cleanName(material)).append(",");
             }
-            out.append(" and ").append(Math.abs(missingMaterials.get(list.get(list.size() - 1)))).append(" ").append(list.get(list.size() - 1)).append(".");
+            if (list.size() > 1) {
+                out.append(" and");
+            }
+            out.append(" ").append(Math.abs(missingMaterials.get(list.get(list.size() - 1)))).append(" ").append(MaterialUtils.cleanName(list.get(list.size() - 1))).append(".");
        
             player.sendMessage(out.toString());
             return false;
